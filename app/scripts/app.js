@@ -1,3 +1,5 @@
+
+
 'use strict';
 
 /**
@@ -15,19 +17,41 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.router',
+    'restangular',
+    'ui.bootstrap',
+    'angularFileUpload'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+  .config(['RestangularProvider', '$httpProvider', function(RestangularProvider, $httpProvider) {
+    RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
+    RestangularProvider.setBaseUrl('http://178.62.14.29:8080/PMS-1.5/rest/');
+    RestangularProvider.setRestangularFields({
+      selfLink: 'self.link'
+    });
+  }])
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.otherwise('/app/main');
+    
+    $stateProvider
+      .state('app', {
+        url: '/app',
+        templateUrl: 'views/app.html'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
+      .state('app.main', {
+        url: '/main',
+        templateUrl: 'views/main.html'
       })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+      .state('app.status', {
+        url: '/statusItem',
+        templateUrl: 'views/statusItem/list.html',
+        controller: 'StatusItemCtrl'
+      })
+      .state('app.category', {
+        url: '/categories',
+        templateUrl: 'views/categories/list.html',
+        controller: 'CategoryCtrl'
+      })
+
+  }])

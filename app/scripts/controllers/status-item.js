@@ -57,31 +57,31 @@ angular.module('pmsV1FrontEndApp')
       })
     }
 
-  	// $scope.$watch('statusItem.statusObj.imageURL', function () {
-   //      $scope.upload($scope.statusItem.statusObj.imageURL);
-   //  });
+  	$scope.$watch('statusItem.statusObj.imageURL', function () {
+        $scope.upload($scope.statusItem.statusObj.imageURL);
+    }, true);
 
-   //  $scope.upload = function (files) {
-   //  	console.log(files);
-   //      if (files && files.length) {
-   //          for (var i = 0; i < files.length; i++) {
-   //              var file = files[i];
-   //              $upload.upload({
-   //              		method: 'POST',
-   //              		url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-   //              		transformRequest: angular.identity,
-			// 							headers: {'Content-Type': undefined},
-   //                  /*fields: {'username': $scope.username},*/
-   //                  file: file
-   //              }).progress(function (evt) {
-   //                  var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-   //                  console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-   //              }).success(function (data, status, headers, config) {
-   //                  console.log(data);
-   //              });
-   //          }
-   //      }
-   //  };
+    $scope.upload = function (files) {
+    	console.log(files);
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                $upload.upload({
+                		method: 'POST',
+                		url: 'http://178.62.14.29:8080/PMS-1.5/rest/file/upload',
+                		transformRequest: angular.identity,
+										headers: {'Content-Type': undefined},
+                    /*fields: {'username': $scope.username},*/
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    $scope.statusItem.statusObj.imageURL = data.url;
+                });
+            }
+        }
+    };
 
   	$scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
